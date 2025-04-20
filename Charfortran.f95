@@ -1,6 +1,6 @@
 module Charfortran
     implicit none
-    public :: num_char, split_char, line2array
+    public :: num_char, split_char, line2array, line2array_double
     
 contains
 
@@ -107,4 +107,36 @@ subroutine line2array(line, c, array)
     allocate(array(num+1))
     read(line_cpy,*) array
 end subroutine Line2Array
+
+
+subroutine line2array_double(line, c, array)
+    ! cで区切られた数値文字列を分割し、1次元配列に格納
+    ! Args:
+    !     line (character(len = *), intent(in)) : 文字列
+    !     c (character(len = 1), intent(in)) : 区切り文字
+    !     array (double precision(:), allocatable) : 格納先1次元配列
+        implicit none
+        character(len = *), intent(in) :: line
+        character(len = len(line)) :: line_cpy
+        character(len = 1), intent(in) :: c
+        double precision, allocatable :: array(:)
+        integer :: num
+        integer :: i
+    
+        num = 0
+        do i = 1,len(line)
+            if (line(i:i) == c) then
+                line_cpy(i:i) = ","
+                num = num + 1
+            else
+                line_cpy(i:i) = line(i:i)
+            endif
+        enddo
+    
+        allocate(array(num+1))
+        read(line_cpy,*) array
+    end subroutine Line2Array_double
+
+
 end module Charfortran
+
